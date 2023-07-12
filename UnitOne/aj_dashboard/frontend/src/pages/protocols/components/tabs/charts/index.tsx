@@ -129,8 +129,7 @@ const Charts: React.FC<any> = ({ protocol_id }) => {
             setAromaIntensityChart(dataAromaIntensity)
             setNutritionInfoChart(dataNutritionInfo)
             setTextureMetricsChart(dataTextureMetrics)
-            
-            
+
         }
 
     }
@@ -138,7 +137,7 @@ const Charts: React.FC<any> = ({ protocol_id }) => {
         console.log("tasteIntensityChart>>>>>>>>>", tasteIntensityChart)
     }, [tasteIntensityChart]) */
 
-    //console.log("sensoryPanelChart>>>>>>>>>", sensoryPanelChart)
+   console.log("sensoryPanelChart>>>>>>>>>", sensoryPanelChart)
     //console.log("protocolsKeys>>>>>>>>>", protocolsKeys)
 
     const data = [
