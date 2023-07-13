@@ -57,6 +57,7 @@ class ProtocolView(GenericViewSet):
                 result = self.create_flow(flow=data['flow'], protocol_id=obj.id)
         else:
             data = request.data
+            del data['aroma_intensity'], data['taste_intensity']
             if 'name' not in data:
                 data['name'] = 'Protocol-0'
                 if Protocol.objects.filter().count():
@@ -98,12 +99,14 @@ class ProtocolView(GenericViewSet):
         # protocol = Protocol.objects.get(id=pk)
         result = {}
         protocol = Protocol.objects.annotate(num_protocol_meta_recipes=models.Count('protocol_meta_recipes')).get(id=pk)
+        is_draft = True if 'is_draft' in request.data else False
+        is_draft = request.data['is_draft'] if is_draft else False
 
         if 'custom_sensory_panels' in request.data:
             for panel in request.data['custom_sensory_panels']:
                 ProtocolSensoryPanel.objects.filter(id=panel['id']).update(value=panel['value'])
 
-        if not protocol.num_protocol_meta_recipes:
+        if not protocol.num_protocol_meta_recipes or is_draft:
             serializer = ProtocolSerializer(instance=protocol, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
             obj = serializer.save()
