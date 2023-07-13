@@ -82,7 +82,7 @@ const Report: React.FC = () => {
                         textureScale={textureScale}
                         colors={colors} 
                         />
-                        <ReportSensors/>
+                        {/* <ReportSensors/> */}
                     <ProductProcess 
                         processData={processData} 
                         nutritionData={nutritionData}
