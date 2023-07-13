@@ -132,6 +132,7 @@ const CreateEditProtocol: React.FC = () => {
                         // fitView
                         style={rfStyle}
                     />
+                   <Charts protocol_id={id}/> 
                 </Box>
                 <BasicModal
                     open={openModel}
@@ -225,7 +226,7 @@ const CreateEditProtocol: React.FC = () => {
                                     style: {padding : 0}
                                 }
                             },
-                            {
+                           /*  {
                                 label : "Charts",
                                 component : Charts,
                                 props : {
@@ -234,7 +235,7 @@ const CreateEditProtocol: React.FC = () => {
                                 tabProps : {
                                     style: {padding : 0}
                                 }
-                            },
+                            }, */
                             {
                                 label : "Projects",
                                 component : Projects,

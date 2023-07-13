@@ -7,7 +7,7 @@ import { kMaxLength } from "buffer";
 
 const SensoryChart:React.FC<any> = ({data, title,keys})=>{
     return (
-        <Grid item xs={3}>
+        <Grid item xs={4}>
             <Card className='chart-card'>
                 <CardHeader
                     className='chart-card-header'

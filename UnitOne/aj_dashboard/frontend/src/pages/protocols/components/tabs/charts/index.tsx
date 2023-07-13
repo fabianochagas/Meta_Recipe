@@ -1,5 +1,5 @@
 import List from "@mui/material/List";
-import { Collapse, Divider, ListItem } from "@mui/material";
+import { Grid, Divider, ListItem } from "@mui/material";
 import options from "../../protocols/partials/options";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
@@ -176,13 +176,15 @@ const Charts: React.FC<any> = ({ protocol_id }) => {
     
 
     return (
-        <List>
+       /*  <List> */
+       <Grid container spacing={2} m={1}>
             {sensoryPanelChart.length > 0 && <SensoryChart title="Sensory Panel" keys={protocolsKeys} data={sensoryPanelChart} />}
             {tasteIntensityChart.length > 0  && <SensoryChart title="Taste" keys={protocolsKeys}  data={tasteIntensityChart} />}
             {aromaIntensityChart.length > 0  && <SensoryChart title="Aroma Intensity" keys={protocolsKeys}  data={aromaIntensityChart} />}
             {nutritionInfoChart.length > 0  && <SensoryChart title="Nutrition Info" keys={protocolsKeys}  data={nutritionInfoChart} />}
             {textureMetricsChart.length > 0  && <SensoryChart title="TextureMetrics" keys={protocolsKeys}  data={textureMetricsChart} />}
-        </List>
+            </Grid>
+       /*  </List> */
     );
 }
 
