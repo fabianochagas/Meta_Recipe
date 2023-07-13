@@ -13,4 +13,11 @@
 .justify-center{
   justify-content: center;
 }
+
+.protocol_name{
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
  
