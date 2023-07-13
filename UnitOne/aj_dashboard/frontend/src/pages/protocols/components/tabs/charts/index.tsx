@@ -55,11 +55,11 @@ const Charts: React.FC<any> = ({ protocol_id }) => {
                 for (const sensoryPanel of protocolSensoryPanel){
                     let index = dataSensoryPanel.findIndex((dataSensoryPanel: any) => dataSensoryPanel["taste"] == sensoryPanel.variable)
                     if (index > -1) {
-                        dataSensoryPanel[index][protocol.name] = sensoryPanel.value;
+                        dataSensoryPanel[index][protocol.name] = sensoryPanel.value || 0;
                     } else {
                         dataSensoryPanel.push({
                             "taste": sensoryPanel.variable,
-                            [protocol.name]: sensoryPanel.value
+                            [protocol.name]: sensoryPanel.value || 0
                         });
                     }
                 }
@@ -68,11 +68,11 @@ const Charts: React.FC<any> = ({ protocol_id }) => {
                     var nValue : number = Number(protocolTasteIntensity[key]);
                     let indexm = dataTasteIntensity.findIndex((dataTasteIntensity: any) => dataTasteIntensity["taste"] == key)
                     if (indexm > -1) {
-                        dataTasteIntensity[index][protocol.name] = nValue;
+                        dataTasteIntensity[index][protocol.name] = nValue || 0;
                     } else {
                         dataTasteIntensity.push({
                             "taste": key,
-                            [protocol.name]: nValue
+                            [protocol.name]: nValue || 0
                         });
                     }
 
@@ -80,13 +80,13 @@ const Charts: React.FC<any> = ({ protocol_id }) => {
                 //genarate Aroma Intensity chart opject for Chart
                Object.keys(protocolAromaIntensity).map((key,index)=>{
                     var nValue : number = Number(protocolAromaIntensity[key]);
-                    let indexm = dataNutritionInfo.findIndex((dataNutritionInfo: any) => dataNutritionInfo["taste"] == key)
+                    let indexm = dataAromaIntensity.findIndex((dataAromaIntensity: any) => dataAromaIntensity["taste"] == key)
                     if (indexm > -1) {
-                        dataNutritionInfo[index][protocol.name] = nValue;
+                        dataAromaIntensity[index][protocol.name] = nValue || 0;
                     } else {
-                        dataNutritionInfo.push({
+                        dataAromaIntensity.push({
                             "taste": key,
-                            [protocol.name]: nValue
+                            [protocol.name]: nValue || 0
                         });
                     }
 
@@ -97,11 +97,11 @@ const Charts: React.FC<any> = ({ protocol_id }) => {
                     var nValue : number = Number(protocolNutritionInfo[key]);
                     let indexm = dataNutritionInfo.findIndex((dataNutritionInfo: any) => dataNutritionInfo["taste"] == key)
                     if (indexm > -1) {
-                        dataNutritionInfo[index][protocol.name] = nValue;
+                        dataNutritionInfo[index][protocol.name] = nValue || 0;
                     } else {
                         dataNutritionInfo.push({
                             "taste": key,
-                            [protocol.name]: nValue
+                            [protocol.name]: nValue || 0
                         });
                     }
 
@@ -112,11 +112,11 @@ const Charts: React.FC<any> = ({ protocol_id }) => {
                     var nValue : number = Number(protocolTextureMetrics[key]);
                     let indexm = dataTextureMetrics.findIndex((dataTextureMetrics: any) => dataTextureMetrics["taste"] == key)
                     if (indexm > -1) {
-                        dataTextureMetrics[index][protocol.name] = nValue;
+                        dataTextureMetrics[index][protocol.name] = nValue || 0; 
                     } else {
                         dataTextureMetrics.push({
                             "taste": key,
-                            [protocol.name]: nValue
+                            [protocol.name]: nValue  || 0
                         });
                     }
 
@@ -129,8 +129,7 @@ const Charts: React.FC<any> = ({ protocol_id }) => {
             setAromaIntensityChart(dataAromaIntensity)
             setNutritionInfoChart(dataNutritionInfo)
             setTextureMetricsChart(dataTextureMetrics)
-            
-            
+
         }
 
     }
@@ -138,7 +137,7 @@ const Charts: React.FC<any> = ({ protocol_id }) => {
         console.log("tasteIntensityChart>>>>>>>>>", tasteIntensityChart)
     }, [tasteIntensityChart]) */
 
-    //console.log("sensoryPanelChart>>>>>>>>>", sensoryPanelChart)
+   console.log("sensoryPanelChart>>>>>>>>>", sensoryPanelChart)
     //console.log("protocolsKeys>>>>>>>>>", protocolsKeys)
 
     const data = [

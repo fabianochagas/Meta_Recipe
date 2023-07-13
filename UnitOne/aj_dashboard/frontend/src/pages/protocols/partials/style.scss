@@ -13,6 +13,30 @@
   font-size: 18px;
  }
 
+ .design-arrow-ingredient{
+  background-color: #F2F3F3;
+  visibility:hidden ;
+  color: #92979D;
+  margin: 8px 0px ;
+  padding: 5px 0px ;
+ }
+ .ing-row * {
+  margin: 0px !important;
+ }
+ .ing-row  {
+  margin: 5px 0px !important;
+ }
+ 
+ .ing-row:hover  .design-arrow-ingredient {
+  visibility:visible ;
+ }
+
+ .ing_controll{
+  border: 1px solid #C2C9D1;
+  border-radius: 5px ;
+ }
+
+ 
 .node-item{
   border: 0.558981px solid rgba(58, 53, 65, 0.23);
   border-radius: 4px;
