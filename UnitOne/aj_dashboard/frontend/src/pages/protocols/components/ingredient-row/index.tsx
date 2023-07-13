@@ -6,7 +6,8 @@ import target from '../../../../images/target.svg'
 import {IngredientType} from "../../../../types/ModelTypes";
 import { IconButton,} from "@mui/material";
 import CancelIcon from '@mui/icons-material/Cancel';
-
+import ArrowLeftOutlinedIcon from '@mui/icons-material/ArrowLeftOutlined';
+import ArrowRightOutlinedIcon from '@mui/icons-material/ArrowRightOutlined';
 const IngredientRow:React.FC<any> = ({ data, isConnectable, index  , onChange, onRemove})=>{
     const [value , setValue] = useState<IngredientType>((data?.data.value ?? {}) as IngredientType)
     const [amount , setAmount] = useState(data?.data?.value?.amount ?? '')
@@ -39,50 +40,75 @@ const IngredientRow:React.FC<any> = ({ data, isConnectable, index  , onChange, o
 
     const isValidConnection = (connection:any)=>  true
 
+    const handelIncresing = (ingName:string)=>{
+       /*  value <= 10 && handelItems(value,name) */
+        let newAmount=Number(amount)+1
+        setAmount(newAmount)
+        onChange(index , {name , amount:newAmount , unit , [ingName] :newAmount });
+       
+    }
 
+    const handelDecresing = (ingName:string)=>{
+        let newAmount=Number(amount)-1        
+        onChange(index , {name , amount:newAmount , unit , [ingName]: newAmount });
+        setAmount(newAmount)
+    }
 
 
     return (
 
-        <Grid container spacing={0}>
+        <Grid container spacing={0} className="ing-row">
             <Grid item xs={1} className='handle-container-nopdding handle-container'  >
             <IconButton aria-label="settings"   onClick={()=> onRemove(data?.id)} >
                 <CancelIcon className='deleteingicon' sx={{ fontSize: 40 }}  />
             </IconButton>       
-
             </Grid>
-            <Grid item xs={6} width='7ch' >
-                <FormControl sx={{ m: 1}} variant="outlined"   size="small"  >
-                    <OutlinedInput
-                        value={name}
-                        onInput={handleChange}
-                        name='name'
-                        id="outlined-adornment-weight"
-                        aria-describedby="outlined-weight-helper-text"
-                        inputProps={{
-                            'aria-label': 'weight',
-                        }}
-                    />
-                </FormControl>
+            <Grid xs={10} container spacing={0} className="ing_controll"> 
+                <Grid xs={1} onClick={() => handelDecresing(name)} className="design-arrow-ingredient">
+                    <ArrowLeftOutlinedIcon />
+                </Grid>
+                <Grid item xs={5} width='7ch' >
+                    <FormControl sx={{ m: 1}} variant="outlined"   size="small"  >
+                        <OutlinedInput
+                            value={name}
+                            onInput={handleChange}
+                            name='name'
+                            id="outlined-adornment-weight"
+                            aria-describedby="outlined-weight-helper-text"
+                            inputProps={{
+                                'aria-label': 'weight',
+                                disableUnderline: true,
+                            }}
+                            sx={{
+                                "& fieldset": { border: 'none' },
+                            }}
+                        />
+                    </FormControl>
+                </Grid>
+                <Grid item xs={5}>
+                    <FormControl sx={{ m: 1 }} variant="outlined"   size="small">
+                        <OutlinedInput
+                            className={'number-input'}
+                            type='number'
+                            value={amount}
+                            onInput={handleChange}
+                            name='amount'
+                            id="outlined-adornment-weight"
+                            endAdornment={<InputAdornment position="end">{unit}</InputAdornment>}
+                            aria-describedby="outlined-weight-helper-text"
+                            inputProps={{
+                                'aria-label': 'weight',
+                            }}
+                            sx={{
+                                "& fieldset": { border: 'none' },
+                            }}
+                        />
+                    </FormControl>
+                </Grid>
+                <Grid xs={1} onClick={() =>handelIncresing(name)} className="design-arrow-ingredient">
+                    <ArrowRightOutlinedIcon />
+                </Grid>
             </Grid>
-            <Grid item xs={4}>
-                <FormControl sx={{ m: 1 }} variant="outlined"   size="small">
-                    <OutlinedInput
-                        className={'number-input'}
-                        type='number'
-                        value={amount}
-                        onInput={handleChange}
-                        name='amount'
-                        id="outlined-adornment-weight"
-                        endAdornment={<InputAdornment position="end">{unit}</InputAdornment>}
-                        aria-describedby="outlined-weight-helper-text"
-                        inputProps={{
-                            'aria-label': 'weight',
-                        }}
-                    />
-                </FormControl>
-            </Grid>
-
             <Grid item xs={1} className='handle-container'>
                 <Handle type={data.type} position={Position.Right} id={index} isConnectable={isConnectable}
                         className="handle-circle"
@@ -95,8 +121,7 @@ const IngredientRow:React.FC<any> = ({ data, isConnectable, index  , onChange, o
                         isValidConnection={isValidConnection} />
 
             </Grid>
-
-
+           
 
         </Grid>
     );
