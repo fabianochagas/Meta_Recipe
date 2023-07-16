@@ -50,7 +50,7 @@ const ListSensory: React.FC<any> = ({ items, name, newTitle,orgTitle, sensory,ha
                     items.map((item: any)=>{
                         let sValue= sensory?.length ? sensory?.find((s:any)=> s?.variable == item.name) : {}
                         let orgValue= orgSensory?.length ? orgSensory?.find((s:any)=> s?.variable == item.name) : {}
-                        console.log("sValue",sValue)
+                        //console.log("sValue",sValue)
                         return(
                             <Grid container spacing={2} m={1}>
                             <Grid xs={12} className="design-taste-items" style={{ background: `linear-gradient(90deg, rgba(49, 114, 220, 0.1) ${sValue.value*10}%, #FFF 0%)` }}>

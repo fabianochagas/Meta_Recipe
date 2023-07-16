@@ -380,7 +380,7 @@ const useProtocol = () => {
         }
         // walk through the node list and connect their nodes
         // with suitable actions
-      return  nodes.map((node:Node) => {
+      return  nodes?.map((node:Node) => {
           node.data = {
               ... node.data,
               ..._actions[node.type??'']

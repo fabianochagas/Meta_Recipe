@@ -20,7 +20,7 @@ import SplitButton from "./component/savebutton";
 
 const Design: React.FC<any> = ({  protocol_id, sensory ,setSensory,afterSave, onSave,
     tasteIntensity,setTasteIntensity,aromaIntensity,setAromaIntensity,nutritionInfo,setNutritionInfo,textureMetrics, setTextureMetrics,
-    isDraft, onDraftSave,revertProtocol,onDuplicate }) => {
+    isDraft, onDraftSave,revertProtocol,onDuplicate,incrementCounter }) => {
     const [sensorsList, setSensorsList] = useState<any>([]);
 
     useEffect(() => {
@@ -32,6 +32,7 @@ const Design: React.FC<any> = ({  protocol_id, sensory ,setSensory,afterSave, on
     
       const handleSensory = ( newValue: number | number[], key: string,id : number) => {
           setSensory(sensory.map((el:any) => (el.id === id ? {...el, ["value"]:newValue} : el)))
+          incrementCounter()
       };
 
 

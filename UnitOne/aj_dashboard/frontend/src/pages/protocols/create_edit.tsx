@@ -26,6 +26,8 @@ import Design from "./components/tabs/design";
 import Generate from "./components/tabs/generate";
 import Charts from "./components/tabs/charts";
 import Projects from "./components/tabs/projects";
+import {useCounter} from "../../common/hooks/counter";
+import {useSelector} from "react-redux";
 
 const rfStyle = {
     backgroundColor: 'trasparent',
@@ -65,6 +67,8 @@ const CreateEditProtocol: React.FC = () => {
 
         = useProtocol();
 
+        const {incrementCounter,reCounter} = useCounter();
+        const state = useSelector(state => state)
 
     const [tabs , setTabs] = useState<any>([]);
     useEffect(()=> {
@@ -97,7 +101,7 @@ const CreateEditProtocol: React.FC = () => {
         setValue(newValue);
     };
 
-
+console.log("(state as any).counter",(state as any))
     return (
         <>
 
@@ -132,7 +136,13 @@ const CreateEditProtocol: React.FC = () => {
                         // fitView
                         style={rfStyle}
                     />
-                   <Charts protocol_id={id}/> 
+                   <Charts 
+                   sensory={[...extra]}
+                   tasteIntensity={tasteIntensity}
+                   aromaIntensity={aromaIntensity}
+                   nutritionInfo={nutritionInfo}
+                   textureMetrics={textureMetrics}
+                    protocol_id={id}/> 
                 </Box>
                 <BasicModal
                     open={openModel}
@@ -198,7 +208,8 @@ const CreateEditProtocol: React.FC = () => {
                                     setTextureMetrics:setTextureMetrics,
                                     isDraft:isDraft,
                                     onDraftSave:onDraftSave,
-                                    onDuplicate:onDuplicate
+                                    onDuplicate:onDuplicate,
+                                    incrementCounter:incrementCounter
                                 },
                                 tabProps : {
                                     style: {padding : 0}

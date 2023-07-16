@@ -12,10 +12,14 @@ import './style.scss'
 import { ProtocolType, ListType } from "../../../../../types/ModelTypes";
 import { addParamsToEndpoint, getEndpoint } from "../../../../../common/http";
 import { http, useHttp } from "../../../../../plugins/axios";
+import {useCounter} from "../../../../../common/hooks/counter";
+import {useSelector} from "react-redux";
 
 
-const Charts: React.FC<any> = ({ protocol_id }) => {
-    //const [protocols, setProtocols] = useState<Array<ProtocolType>>([])
+
+const Charts: React.FC<any> = ({ protocol_id ,sensory ,tasteIntensity,aromaIntensity,nutritionInfo, textureMetrics}) => {
+    const state = useSelector(state => state)
+    const [protocols, setProtocols] = useState<Array<ProtocolType>>([])
     const [sensoryPanelChart, setSensoryPanelChart] = useState([])
     const [tasteIntensityChart, setTasteIntensityChart] = useState([])
     const [aromaIntensityChart, setAromaIntensityChart] = useState([])
@@ -24,16 +28,31 @@ const Charts: React.FC<any> = ({ protocol_id }) => {
     const [protocolsKeys, setProtocolsKeys] = useState<any>([])
     const [finsh, setFinsh] = useState<number>(0)
     const { request } = useHttp();
-
+    const {incrementCounter,reCounter} = useCounter();
     useEffect(() => {
         if (protocol_id) {
             http<ListType<ProtocolType>>(addParamsToEndpoint(getEndpoint('similar_protocols'), { id: protocol_id })).then(response => {
-               // console.log("response>>>>>>", response)
-
-                buildChartData([...response.data.payload])
+            console.log("similar_protocols sensory",sensory)
+               setProtocols([...response.data.payload])
+               buildChartData([...response.data.payload])
             })
         }
     }, [protocol_id])
+
+    useEffect(() => {
+        setSensoryPanelChart([])
+        setTasteIntensityChart([])
+        setSensoryPanelChart([])
+        buildChartData([...protocols])
+        console.log("reCounter",reCounter)
+    }, [(state as any).counter])
+
+    useEffect(() => {
+       
+        setProtocols(protocols.map((el:any) => (el.id == protocol_id ? {...el, ["custom_sensory_panels"]:sensory, ["taste_intensity"]:tasteIntensity, ["aroma_intensity"]:aromaIntensity, ["nutrition_info"]:nutritionInfo, ["texture_metrics"]:textureMetrics} : el)))
+        
+    }, [sensory ,tasteIntensity ,aromaIntensity ,nutritionInfo ,textureMetrics])
+
 
     const buildChartData = async (protocols: any) => {
         let dataSensoryPanel: any = [];
@@ -45,11 +64,11 @@ const Charts: React.FC<any> = ({ protocol_id }) => {
         if (protocols.length) {
             for (let protocol of protocols) {
                  pKeys.push(protocol.name);  
-                let protocolSensoryPanel = protocol?.custom_sensory_panels
-                let protocolTasteIntensity = protocol?.taste_intensity
-                let protocolAromaIntensity = protocol?.aroma_intensity
-                let protocolNutritionInfo = protocol?.nutrition_info
-                let protocolTextureMetrics = protocol?.texture_metrics
+                let protocolSensoryPanel = protocol?.custom_sensory_panels || []
+                let protocolTasteIntensity = protocol?.taste_intensity || []
+                let protocolAromaIntensity = protocol?.aroma_intensity || []
+                let protocolNutritionInfo = protocol?.nutrition_info || []
+                let protocolTextureMetrics = protocol?.texture_metrics || []
 
                 //genarate sensoryPanel chart opject for Chart
                 for (const sensoryPanel of protocolSensoryPanel){
@@ -178,9 +197,9 @@ const Charts: React.FC<any> = ({ protocol_id }) => {
     return (
        /*  <List> */
        <Grid container spacing={2} m={1}>
-            {sensoryPanelChart.length > 0 && <SensoryChart title="Sensory Panel" keys={protocolsKeys} data={sensoryPanelChart} />}
-            {tasteIntensityChart.length > 0  && <SensoryChart title="Taste" keys={protocolsKeys}  data={tasteIntensityChart} />}
-            {aromaIntensityChart.length > 0  && <SensoryChart title="Aroma Intensity" keys={protocolsKeys}  data={aromaIntensityChart} />}
+            {sensoryPanelChart.length > 0 && <SensoryChart key={'sensory-chart-' + (state as any).counter } title="Sensory Panel" keys={protocolsKeys} data={sensoryPanelChart} />}
+            {tasteIntensityChart.length > 0  && <SensoryChart  key={'taste-intensity-chart-' + (state as any).counter }  title="Taste" keys={protocolsKeys}  data={tasteIntensityChart} />}
+            {aromaIntensityChart.length > 0  && <SensoryChart  key={'aroma-intensity-chart' + (state as any).counter } title="Aroma Intensity" keys={protocolsKeys}  data={aromaIntensityChart} />}
             {nutritionInfoChart.length > 0  && <SensoryChart title="Nutrition Info" keys={protocolsKeys}  data={nutritionInfoChart} />}
             {textureMetricsChart.length > 0  && <SensoryChart title="TextureMetrics" keys={protocolsKeys}  data={textureMetricsChart} />}
             </Grid>

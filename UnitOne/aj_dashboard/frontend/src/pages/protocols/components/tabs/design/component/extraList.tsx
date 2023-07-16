@@ -7,8 +7,12 @@ import { ClassNames } from "@emotion/react";
 import ViewItme from "./view-item";
 import ArrowLeftOutlinedIcon from '@mui/icons-material/ArrowLeftOutlined';
 import ArrowRightOutlinedIcon from '@mui/icons-material/ArrowRightOutlined';
+import {useCounter} from "../../../../../../common/hooks/counter";
+
 
 const ExtraList: React.FC<any> = ({ items, name, newTitle,orgTitle, setitems }) => {
+
+    const {incrementCounter,reCounter} = useCounter();
     const [copy, setCopy] = useState<boolean>(true)
     const [orgItems, setOrgItems] = useState<any>({});
     const handelItems = (value:number,name:string)=>{
@@ -17,12 +21,14 @@ const ExtraList: React.FC<any> = ({ items, name, newTitle,orgTitle, setitems }) 
 
     const handelIncresing = (value:number,name:string)=>{
         value <= 10 && handelItems(value,name)
+        incrementCounter()
     }
 
    
 
     const handelDecresing = (value:number,name:string)=>{
         value >= 0 && handelItems(value,name)
+        incrementCounter()
     }
 
     useEffect(() => {
