@@ -613,18 +613,50 @@ const useProtocol = () => {
                 type: AlertTypes.SUCCESS,
                 message: `Protocol ${protocol.name} ${isEdit ? 'updated' : 'added'}  successfully`
             })
-            navigator('/protocols');
+           /*  navigator('/protocols'); */
         })
         
     }
 
     const onDuplicate = () => {
-        request<ListType<ProtocolType>>(getEndpoint('clone_protocols'), {ids : [id]} ).then(response => {
+       /*  request<ListType<ProtocolType>>(getEndpoint('clone_protocols'), {ids : [id]} ).then(response => {
             showAlert({
                 type: AlertTypes.SUCCESS,
                 message: `Protocols cloned successfully`
             })
+        }) */
+        let _form = {
+            ...form,
+            project:project/* project_id */,
+            name:name+"_colne_"+new Date().getUTCMilliseconds(),
+            flow : {
+                nodes: nodes,
+                edges: edges
+            },
+            taste_intensity:tasteIntensity,
+            aroma_intensity:aromaIntensity,
+            nutrition_info:nutritionInfo,
+            texture_metrics:textureMetrics,
+            custom_sensory_panels:extra,
+            is_draft:isDraft,
+        }
+        console.log('form', _form, JSON.stringify(_form))
+        // change the endpoint according to the isEdit flag
+        const endpoint = addParamsToEndpoint(getEndpoint('add_protocol'), {project_id, id: id})
+        /**
+         * Duplicate protocole
+         * @author Bilal
+         */
+        request<ProtocolType>(endpoint, _form).then((response) => {
+            const protocol = response?.data?.payload
+            showAlert({
+                type: AlertTypes.SUCCESS,
+                message: `Protocols Duplicated successfully`
+            })
+             
+            navigator('/protocols/'+protocol?.id);
         })
+        
     }
 
        /**

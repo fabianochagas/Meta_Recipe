@@ -156,7 +156,7 @@ console.log("(state as any).counter",(state as any))
                 <MessageModal
                     open={openSaveAsRicpeModel}
                     setOpen={(status : boolean) => setOpenSaveAsRicpeModel(status)}
-                    message="The protocol will be as recipe are you sure ? "
+                    message="Are you sure that you want to save the changes as a new Recipe? "
                     onSave={saveAsRecipe}
                 />
 
