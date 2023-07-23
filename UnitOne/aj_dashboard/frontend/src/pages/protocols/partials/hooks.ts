@@ -731,7 +731,7 @@ const useProtocol = () => {
         handleOpenModel(false)
         showAlert({
             type: AlertTypes.SUCCESS,
-            message: `Protocol adjusted successfully`
+            message: `Protocol adjusted and save successfully`
         })
         setCounter((counter:number) => counter + 1)
     }

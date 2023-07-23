@@ -109,7 +109,7 @@ console.log("(state as any).counter",(state as any))
                 <Box width="100%" style={{ height: '80ch' }} key={'nodes-' + counter}>
                     <Stack spacing={2} direction="row" justifyContent="right" className="list-master-actions" width="100%">
                         <Button variant="text" color="info" onClick={onDuplicate}>Duplicate</Button>
-                        <Button variant="text" color="primary" className='primary' onClick={onSave}>Save</Button>
+                        <Button variant="text" color="primary" className='primary' onClick={saveSensory/* onSave */}>Save</Button>
                         {/*{isEdit && <Button variant="text" color="info" onClick={() => handleOpenModel(true)}>Predict</Button>} */}
                         {/*  <DropdownMenu menuList={menuList}/> */}
                         <label htmlFor="upload-photo">
