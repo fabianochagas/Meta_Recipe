@@ -1,10 +1,10 @@
 import {TimePicker} from "antd";
 import dayjs from "dayjs";
 import React, {useEffect, useState} from "react";
-import {createStyles, FormControl, InputAdornment, makeStyles, OutlinedInput, Theme} from "@mui/material";
+import {InputLabel, FormControl, InputAdornment, makeStyles, OutlinedInput, Theme} from "@mui/material";
 
 
-const ProtocolTimePicker: React.FC<any> = ({props, onChange, data, value}) => {
+const ProtocolTimePicker: React.FC<any> = ({props, onChange, data, value,extra}) => {
 
     const [localValue, setLocalValue] = useState<any>(data.value);
     /**
@@ -23,16 +23,20 @@ const ProtocolTimePicker: React.FC<any> = ({props, onChange, data, value}) => {
         onChange(_value);
     }
 
+    console.log("extra",extra)
+
     return (
         <FormControl sx={{m: 1}} variant="outlined" size="small">
+            <InputLabel size="small" id="process-options-label">{extra?.name || ""}</InputLabel>
             <OutlinedInput
                 className={'number-input'}
                 type='number'
+                label="Number"
                 value={localValue}
                 onChange={handleChange}
                 name='time'
                 id="outlined-adornment-weight"
-                endAdornment={<InputAdornment position="end">min</InputAdornment>}
+                endAdornment={<InputAdornment position="end">{extra?.unit?.slice(0, 3) || "min"}</InputAdornment>}
                 aria-describedby="outlined-weight-helper-text"
                 inputProps={{
                     'aria-label': 'weight',

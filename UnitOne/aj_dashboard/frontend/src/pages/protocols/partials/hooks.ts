@@ -489,7 +489,8 @@ const useProtocol = () => {
      * @author Bilal
      */
     const saveAsRecipe = () => {
-        saveProtocol()
+        /* saveProtocol() */
+        saveAndPredict()
         setOpenSaveAsRicpeModel(false)
     }
     /**
@@ -555,7 +556,7 @@ const useProtocol = () => {
         }else{
             setIsDraft(0)
             setSaveAsDraf(saveAsDraf+1)
-           /*  saveProtocol() */
+            
         }
 
     }
@@ -570,7 +571,7 @@ const useProtocol = () => {
 
     useEffect(() => {
         if(saveAsDraf != 0){
-            saveProtocol()
+            saveAndPredict()
         }
     }, [saveAsDraf])
 
@@ -722,6 +723,40 @@ const useProtocol = () => {
                // navigator('/protocols/'+protocol_id);
           })
     }
+       /**
+     * save sensory   
+     * @author Bilal
+     */
+       const saveAndPredict = () => {
+        let protocol_id=id
+        let _form = {
+            protocol:protocol_id,
+            sensors:extra,
+            name:name,
+            flow : {
+                nodes: nodes,
+                edges: edges
+            }
+          }
+          console.log('form', _form, JSON.stringify(_form))
+          // change the endpoint according to the isEdit flag
+          const endpoint = addParamsToEndpoint(getEndpoint('save_amount_protocol'), {
+            protocol_id,
+            id: protocol_id
+          }) 
+          
+          request<ProtocolType>(endpoint, _form).then((response) => {
+              const protocol = response?.data?.payload
+      
+              // handleClose()
+              // window.location.reload();
+              onSaveAdjustment(response);
+      
+      
+      
+               // navigator('/protocols/'+protocol_id);
+          })
+    }
 
     const onSaveAdjustment = (response:any)=> {
         console.log('response' , response.data.payload.flow.nodes)
@@ -760,7 +795,7 @@ const useProtocol = () => {
         counter,openModel , saveSensory ,handleOpenModel,id,extra,setExtra , setForm,projects
         ,openSaveAsRicpeModel,setOpenSaveAsRicpeModel,saveAsRecipe , form , handleFormChanges , isEdit,
         tasteIntensity,setTasteIntensity,aromaIntensity,setAromaIntensity,nutritionInfo,setNutritionInfo,textureMetrics, setTextureMetrics
-        ,isDraft, onDraftSave,revertProtocol,onUploda}
+        ,isDraft, onDraftSave,revertProtocol,onUploda,saveAndPredict}
 
 }
 

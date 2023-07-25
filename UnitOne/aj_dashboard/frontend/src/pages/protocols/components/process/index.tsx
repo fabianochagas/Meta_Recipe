@@ -35,13 +35,11 @@ const Process:React.FC<any> = ({data , isConnectable , id , type}) => {
     }
 
 
-    useEffect(()=>{
-        console.log('data',data)
-    } , [data])
+ 
 
     return (
         <div >
-            <Card sx={{ maxWidth: 345 , width: 250  }} className='node-item '>
+            <Card sx={{ maxWidth: 345 , width: 300  }} className='node-item '>
                 <CardHeader
 
                     className="node-item-header process"
@@ -75,9 +73,9 @@ const Process:React.FC<any> = ({data , isConnectable , id , type}) => {
                                             }}
                                     />
                                 </Grid>
+                                {console.log("input",input)}
                                 <Grid item xs={8} key={`process-field-${index}`}>
-
-                                    {React.createElement(getComponent(input.type) , {...(input.props || {}) , value:dayjs(input.data.value) ,locale:'en_US', data:input.data, size: 'small'  , onChange: (newValue:any)=>handleChange(newValue ,input.id )})}
+                                    {React.createElement(getComponent(input.type) , {...(input.props || {}) , extra:input.props, value:dayjs(input.data.value) ,locale:'en_US', data:input.data, size: 'small'  , onChange: (newValue:any)=>handleChange(newValue ,input.id )})}
                                 </Grid>
                                 <Grid item xs={2} key={`process-source-${index}`} >
                                     <Handle type="source" position={Position.Right} id={`${input.id}-source`} isConnectable={isConnectable}

@@ -65,6 +65,10 @@ export default {
         url : 'protocols/:id/adjustments',
         method: HttpMethodTypes.POST
     },
+    save_amount_protocol:{
+        url : 'protocols/:id/save_adjustments',
+        method: HttpMethodTypes.POST
+    },
     update_protocol:{
         url : 'protocols/:id',
         method: HttpMethodTypes.PUT
@@ -119,6 +123,10 @@ export default {
     },
     all_setups : {
         url : 'setups/',
+        method: HttpMethodTypes.GET
+    } ,
+    cooking_process : {
+        url : 'process/',
         method: HttpMethodTypes.GET
     } ,
 }
