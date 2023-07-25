@@ -320,6 +320,100 @@ class ProtocolView(GenericViewSet):
                     status=status.HTTP_200_OK)
         except Exception as e:
             raise e
+        
+
+    @action(detail=True, methods=['POST'])
+    @transaction.atomic
+    def save_adjustments(self, request, pk=None, *args, **kwargs):
+        try:
+            with transaction.atomic():
+                """ protocol = Protocol.objects.get(id=pk) """
+                protocol = Protocol.objects.annotate(num_protocol_meta_recipes=models.Count('protocol_meta_recipes')).get(id=pk)
+                __protocol = ProtocolSerializer(protocol).data
+                if not len(__protocol['custom_sensory_panels']):
+                    panels = AbstractSensoryPanel.objects.only('name')
+                    for panel in panels:
+                        protocol.custom_sensory_panels.create(variable=panel.name)
+                saved_ingredients = []
+                changed_ingredients = []
+                saved_panels = []
+                changed_panels = []
+                changed_flow = request.data.get('flow', {})
+                for ing in __protocol['protocol_ingredient']:
+                    saved_ingredients.append(
+                        {'name': ing['ingredient_name'], 'quantity': ing['quantity'], 'unit': ing['unit']})
+                for panel in __protocol['custom_sensory_panels']:
+                    saved_panels.append({'variable': panel['variable'], 'value': panel['value']})
+
+                if 'nodes' in changed_flow:
+                    for node in changed_flow['nodes']:
+                        if node['type'] == 'ingredient-container':
+                            for child in node['data']['children']:
+                                ing_name = child['data']['value']['name']
+                                ing_amount = child['data']['value']['amount']
+                                ing_unit = 'g'
+                                changed_ingredients.append(
+                                    {'name': ing_name, 'quantity': float(ing_amount), 'unit': ing_unit})
+                # ingredient_container = filter(lambda ic: ic['type'] == 'ingredient-container', protocol.flow['nodes'])
+                # print(list(ingredient_container))
+                saved = {
+                    'ingredients': saved_ingredients,
+                    'sensory_panel': saved_panels
+                }
+                sensors = request.data.get('sensors', [])
+                changed_panels = [dict((k, d.get(k, None)) for k in ['variable', 'value']) for d in sensors]
+                changed = {
+                    'ingredients': changed_ingredients,
+                    'sensory_panel': changed_panels
+                }
+                ml = ml_component
+                result = ml.predict(saved_state=saved, changed_state=changed)
+                flow = request.data.get('flow', {})
+                if 'nodes' in flow:
+                    for node in flow['nodes']:
+                        if node['type'] == 'ingredient-container':
+                            for child in node['data']['children']:
+                                ing_dict = next(item for item in result['ingredients'] if
+                                                item["name"] == child['data']['value']['name'])
+                                child['data']['value']['amount'] = ing_dict['quantity']
+                    
+
+                is_draft = True if 'is_draft' in request.data else False
+                is_draft = request.data['is_draft'] if is_draft else False
+               
+                
+                if not protocol.num_protocol_meta_recipes or is_draft:
+                    __protocol = self.create_flow(flow=flow, protocol_id=pk)
+                    for panel in result['sensory_panel']:
+                        ProtocolSensoryPanel.objects.filter(protocol=protocol, variable=panel['variable']).update(
+                        value=panel['value'])
+                else:
+                    try:
+                        last_id = Recipe.objects.latest('id')
+                        recipe_name = f"Recipe-{last_id.id + 1}"
+                    except Recipe.DoesNotExist:
+                        recipe_name = 'Recipe-0'
+
+                    try:
+                        last_id = MetaRecipe.objects.latest('id')
+                        meta_name = f"Meta-{last_id.id + 1}"
+                    except MetaRecipe.DoesNotExist:
+                        meta_name = 'Meta-0'
+
+                    meta = protocol.protocol_meta_recipes.get()
+
+                    if not meta:
+                        meta = protocol.protocol_meta_recipes.create(name=meta_name)
+                  
+                    recipe = meta.recipes_for_meta.create(name=recipe_name, protocol=protocol)
+                    recipe_flow = RecipeFlowView
+                    recipe_flow.create_recipe_flow(flow=request.data['flow'], recipe_id=recipe.id)
+                return Response(
+                    {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success',
+                     'payload': __protocol},
+                    status=status.HTTP_200_OK)
+        except Exception as e:
+            raise e
 
     @action(detail=False, methods=['POST'])
     def bulk_destroy(self, request):
