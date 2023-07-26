@@ -571,7 +571,7 @@ const useProtocol = () => {
 
     useEffect(() => {
         if(saveAsDraf != 0){
-            saveAndPredict()
+            isEdit ? saveAndPredict() : saveProtocol()
         }
     }, [saveAsDraf])
 
