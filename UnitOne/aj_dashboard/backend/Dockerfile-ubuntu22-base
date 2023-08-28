@@ -1,0 +1,11 @@
+FROM ubuntu:22.04
+
+RUN apt update; apt upgrade -y
+RUN apt install python3-pip sqlite3 -y
+
+# Installing base python packages 
+RUN pip3 install --upgrade pip
+RUN pip3 install django
+RUN pip3 install djangorestframework
+RUN pip3 install djangorestframework-simplejwt
+RUN pip3 install django-cors-headers

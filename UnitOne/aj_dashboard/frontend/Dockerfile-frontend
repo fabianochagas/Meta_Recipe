@@ -1,0 +1,27 @@
+#FROM node:18.17-alpine AS build
+FROM ubuntu:22.04 AS build
+
+WORKDIR /app
+ENV PATH="/scripts:${PATH}"
+
+RUN apt update
+RUN apt upgrade -y
+RUN apt install curl -y
+
+# Install NodeJS - version 18
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
+RUN cat /etc/apt/sources.list.d/nodesource.list
+RUN apt -y install nodejs
+
+# Install python and pip
+RUN apt install python3 pip -y
+
+COPY package.json .
+COPY .env .
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm","start"]

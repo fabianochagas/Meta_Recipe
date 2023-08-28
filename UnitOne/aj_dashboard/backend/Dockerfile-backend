@@ -1,0 +1,22 @@
+FROM ajinomatrix-ubuntu22-base:1.0.0 as base
+
+# Setting base folder
+WORKDIR /app
+# Copying the whole content of the folder to the /app folder inside the container
+COPY . . 
+
+#Installing app required files
+RUN pip3 install -r requirements.txt
+
+# Create Django superuser
+RUN python3 manage.py makemigrations
+RUN python3 ./manage.py migrate 
+RUN python3 manage.py shell < adminuser.py
+#RUN python3 manage.py loaddata /app/process/fixtures/001_Process.json
+#RUN python3 manage.py loaddata /app/sensory_panels/fixtures/001_AbstractSensoryPanel.json
+#RUN python3 manage.py createsuperuser --username admin --email fchagas.it@gmail.com 
+
+#EXPOSE 8000
+
+# Launch the Django server
+CMD ["python3","manage.py","runserver","0.0.0.0:8000"]
